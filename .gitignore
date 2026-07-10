@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+*.pkl
+.vscode/
+raw_batik_v2.1/
