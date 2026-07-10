@@ -400,24 +400,6 @@ class AplikasiCBIR(ctk.CTk):
         frame_line_2 = ctk.CTkFrame(scroll_frame, height=2, fg_color="#d0d0d0")
         frame_line_2.pack(fill="x", pady=20)
         
-        # bagian penggabungan & perhitungan
-        ctk.CTkLabel(scroll_frame, text="Penggabungan Fitur & Perhitungan Kemiripan", font=("Arial", 20, "bold"), anchor="w").pack(fill="x", pady=(10, 5))
-        
-        frame_fusion = ctk.CTkFrame(scroll_frame, fg_color="#e9ecef", corner_radius=8)
-        frame_fusion.pack(fill="x", pady=5, padx=10)
-        
-        teks_fusion = (f"Dimensi Vektor Tekstur LBP : 10 dimensi\n"
-                       f"Dimensi Vektor Warna RGB   : 192 dimensi (64 bins x 3 channel)\n"
-                       f"Total Vektor Fitur (Fusion): 202 dimensi\n\n"
-                       f"Skor Jarak Euclidean (Kueri vs Top-1) = {top_1['distance']:.5f}\n"
-                       f"Persentase Kemiripan = (1 / (1 + {top_1['distance']:.5f})) x 100 = {top_1['similarity']:.2f}%")
-        
-        ctk.CTkLabel(frame_fusion, text=teks_fusion, justify="left", font=("Consolas", 14), text_color="#333333").pack(pady=15, padx=15, anchor="w")
-        
-        # garis pemisah
-        frame_line_3 = ctk.CTkFrame(scroll_frame, height=2, fg_color="#d0d0d0")
-        frame_line_3.pack(fill="x", pady=20)
-        
         # bagian kesimpulan evaluasi
         ctk.CTkLabel(scroll_frame, text="Kesimpulan Evaluasi Sistem", font=("Arial", 20, "bold"), anchor="w").pack(fill="x", pady=(10, 5))
         
