@@ -68,6 +68,9 @@ def proses_gambar(filepath):
     hist_lbp, map_lbp = ekstrak_lbp(gray)
     hist_warna = ekstrak_warna(img)
     
+    # memberikan bobot lebih pada fitur tekstur (LBP) agar lebih seimbang dengan RGB
+    hist_lbp = hist_lbp * 3.0
+    
     # penggabungan fitur (feature fusion)
     fitur = np.concatenate([hist_lbp, hist_warna])
     
@@ -157,7 +160,7 @@ def cari_gambar_mirip(path_query, db):
     nama_folder = os.path.basename(os.path.dirname(os.path.abspath(path_query)))
     label_asli = nama_folder if nama_folder in semua_label else top_1["label"]
     
-    k = 20
+    k = 10
     top_k_labels = [h["label"] for h in hasil_pencarian[:k]]
     true_positive = sum(1 for lbl in top_k_labels if lbl == label_asli)
     total_relevan = sum(1 for lbl in semua_label if lbl == label_asli)
