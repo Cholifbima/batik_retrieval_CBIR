@@ -149,15 +149,34 @@ def cari_gambar_mirip(path_query, db):
             "distance": nilai_jarak,
             "similarity": similarity
         })
-        break 
         
     waktu_proses = time.time() - waktu_mulai
+    
+    # perhitungan metrik evaluasi (Precision, Recall, F1) pada Top-20
+    top_1 = hasil_pencarian[0]
+    nama_folder = os.path.basename(os.path.dirname(os.path.abspath(path_query)))
+    label_asli = nama_folder if nama_folder in semua_label else top_1["label"]
+    
+    k = 20
+    top_k_labels = [h["label"] for h in hasil_pencarian[:k]]
+    true_positive = sum(1 for lbl in top_k_labels if lbl == label_asli)
+    total_relevan = sum(1 for lbl in semua_label if lbl == label_asli)
+    
+    precision = true_positive / k if k > 0 else 0
+    recall = true_positive / total_relevan if total_relevan > 0 else 0
+    f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
     
     return {
         "query_bgr": bgr_q,
         "query_lbp": map_lbp_q,
         "hasil": hasil_pencarian,
-        "waktu": waktu_proses
+        "waktu": waktu_proses,
+        "metrik": {
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+            "k": k
+        }
     }
 
 
@@ -375,6 +394,30 @@ class AplikasiCBIR(ctk.CTk):
         
         teks_42 = "Histogram RGB digunakan untuk merepresentasikan distribusi warna citra."
         ctk.CTkLabel(scroll_frame, text=teks_42, justify="left", font=("Arial", 13), wraplength=800).pack(fill="x", padx=10, pady=(0, 20))
+        
+        # garis pemisah
+        frame_line_2 = ctk.CTkFrame(scroll_frame, height=2, fg_color="#d0d0d0")
+        frame_line_2.pack(fill="x", pady=20)
+        
+        # bagian 4.3 evaluasi sistem
+        ctk.CTkLabel(scroll_frame, text="4.3 Evaluasi Metrik Pencarian", font=("Arial", 20, "bold"), anchor="w").pack(fill="x", pady=(10, 5))
+        
+        metrik = self.data_hasil["metrik"]
+        frame_43 = ctk.CTkFrame(scroll_frame, fg_color="#f8f9fa", corner_radius=8)
+        frame_43.pack(fill="x", pady=5, padx=10)
+        
+        ctk.CTkLabel(frame_43, text=f"Berdasarkan Top-{metrik['k']} Gambar Teratas", font=("Arial", 14, "italic")).pack(pady=(10, 5))
+        
+        frame_metrik = ctk.CTkFrame(frame_43, fg_color="transparent")
+        frame_metrik.pack(pady=10)
+        
+        ctk.CTkLabel(frame_metrik, text=f"Precision: {metrik['precision'] * 100:.2f}%", font=("Arial", 16, "bold"), text_color="#0056b3").pack(side="left", padx=20)
+        ctk.CTkLabel(frame_metrik, text=f"Recall: {metrik['recall'] * 100:.2f}%", font=("Arial", 16, "bold"), text_color="#198754").pack(side="left", padx=20)
+        ctk.CTkLabel(frame_metrik, text=f"F1-Score: {metrik['f1'] * 100:.2f}%", font=("Arial", 16, "bold"), text_color="#dc3545").pack(side="left", padx=20)
+        
+        teks_43 = ("Metrik dievaluasi dengan membandingkan label kelas pada top K hasil pencarian terhadap kelas aktual gambar kueri. "
+                   "Nilai F1-Score digunakan sebagai indikator keandalan utama sistem (harmonic mean).")
+        ctk.CTkLabel(scroll_frame, text=teks_43, justify="left", font=("Arial", 13), wraplength=800).pack(fill="x", padx=10, pady=(10, 20))
 
 
 if __name__ == "__main__":
