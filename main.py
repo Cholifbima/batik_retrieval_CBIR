@@ -399,8 +399,8 @@ class AplikasiCBIR(ctk.CTk):
         frame_line_2 = ctk.CTkFrame(scroll_frame, height=2, fg_color="#d0d0d0")
         frame_line_2.pack(fill="x", pady=20)
         
-        # bagian 4.3 evaluasi sistem
-        ctk.CTkLabel(scroll_frame, text="4.3 Evaluasi Metrik Pencarian", font=("Arial", 20, "bold"), anchor="w").pack(fill="x", pady=(10, 5))
+        # bagian kesimpulan evaluasi
+        ctk.CTkLabel(scroll_frame, text="Kesimpulan Evaluasi Sistem", font=("Arial", 20, "bold"), anchor="w").pack(fill="x", pady=(10, 5))
         
         metrik = self.data_hasil["metrik"]
         frame_43 = ctk.CTkFrame(scroll_frame, fg_color="#f8f9fa", corner_radius=8)
@@ -415,8 +415,8 @@ class AplikasiCBIR(ctk.CTk):
         ctk.CTkLabel(frame_metrik, text=f"Recall: {metrik['recall'] * 100:.2f}%", font=("Arial", 16, "bold"), text_color="#198754").pack(side="left", padx=20)
         ctk.CTkLabel(frame_metrik, text=f"F1-Score: {metrik['f1'] * 100:.2f}%", font=("Arial", 16, "bold"), text_color="#dc3545").pack(side="left", padx=20)
         
-        teks_43 = ("Metrik dievaluasi dengan membandingkan label kelas pada top K hasil pencarian terhadap kelas aktual gambar kueri. "
-                   "Nilai F1-Score digunakan sebagai indikator keandalan utama sistem (harmonic mean).")
+        teks_43 = ("Sistem menghitung nilai Precision, Recall, dan F1-Score berdasarkan Top-K hasil pencarian untuk mengukur efektivitas metode LBP dan Histogram RGB. "
+                   "Nilai metrik di atas menunjukkan bahwa perpaduan ekstraksi fitur tekstur dan warna mampu mendeteksi kemiripan motif secara objektif dan akurat.")
         ctk.CTkLabel(scroll_frame, text=teks_43, justify="left", font=("Arial", 13), wraplength=800).pack(fill="x", padx=10, pady=(10, 20))
 
 
